@@ -6,7 +6,7 @@ export const getCoupon = async (req, res) => {
         if (!coupon) {
             return res.status(404).json({ message: "No active coupon found" });
         }
-        res.json({ coupon });
+        res.json(coupon);
     } catch (error) {
         console.log("Error in getCoupon controller", error.message);
         res.status(500).json({ message: "Server error", error: error.message });
@@ -25,7 +25,7 @@ export const validateCoupon = async (req, res) => {
             return res.status(400).json({ message: "Coupon has expired" });
         }
 
-        res.json({ message: "Coupon is valid", data: { code: coupon.code, discount: coupon.discount } });
+        res.json({ message: "Coupon is valid", code: coupon.code, discountPercentage: coupon.discountPercentage });
 
     } catch (error) {
         console.log("Error in validateCoupon controller", error.message);
