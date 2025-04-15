@@ -37,7 +37,7 @@ export const login = async (req, res) => {
             setCookies(res, accessToken, refreshToken);
             res.json({ message: "Login successfully", user: { id: user._id, name: user.name, email: user.email, role: user.role } });
         }
-        else return res.status(401).json({ error: "Invalid credentials" })
+        else return res.status(400).json({ error: "Invalid credentials" })
     } catch (error) {
         console.log("Fail to login:", error.message);
         res.status(500).json({ error: error.message })
