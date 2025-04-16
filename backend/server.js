@@ -13,7 +13,7 @@ import analyticsRoutes from './routes/analytics.route.js';
 const app = express();
 const __dirname = path.resolve();
 
-app.use(express.json({limit: '10mb'}));
+app.use(express.json({limit: '20mb'}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
