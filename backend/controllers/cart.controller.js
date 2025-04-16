@@ -37,9 +37,9 @@ export const addToCart = async (req, res) => {
 	}
 };
 
-export const removeAllFromCart = async (req, res) => {
+export const removeProductFromCart = async (req, res) => {
 	try {
-		const { productId } = req.body;
+		const { id: productId } = req.params;
 		const user = req.user;
 		if (!productId) {
 			user.cartItems = [];
@@ -52,6 +52,18 @@ export const removeAllFromCart = async (req, res) => {
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 };
+
+export const clearCart = async (req, res) => {
+	const user = req.user;
+	try {
+		user.cartItems = [];
+		await user.save();
+		res.json();
+	} catch (error) {
+		console.log("Error in clearCart controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });	
+	}
+}
 
 export const updateQuantity = async (req, res) => {
 	try {

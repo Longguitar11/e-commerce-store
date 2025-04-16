@@ -8,7 +8,7 @@ import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
 
 const CartPage = () => {
-	const { cart } = useCartStore();
+	const { cart, isCouponApplied } = useCartStore();
 
 	return (
 		<div className='py-8 md:py-16'>

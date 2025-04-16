@@ -57,12 +57,12 @@ export const logout = async (req, res) => {
     } catch (error) {
         console.log("Fail to logout:", error.message);
         res.status(500).json({ error: error.message })
-
     }
 }
 
 export const refreshAccessToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
+    
     if (!refreshToken) return res.status(401).json({ error: "No refresh token provided" });
 
     try {

@@ -30,6 +30,7 @@ export const useCartStore = create((set, get) => ({
 	removeCoupon: () => {
 		set({ coupon: null, isCouponApplied: false });
 		get().calculateTotals();
+		get().getMyCoupon();
 		toast.success("Coupon removed");
 	},
 
@@ -66,9 +67,17 @@ export const useCartStore = create((set, get) => ({
 		}
 	},
 	removeFromCart: async (productId) => {
-		await axios.delete(`/cart`, { data: { productId } });
+		await axios.delete(`/cart/${productId}`);
 		set((prevState) => ({ cart: prevState.cart.filter((item) => item._id !== productId) }));
 		get().calculateTotals();
+	},
+	clearCart: async () => {
+		try {
+			await axios.delete("/cart");
+			set({ cart: [], coupon: null, total: 0, subtotal: 0 });
+		} catch (error) {
+			console.log("Error clearing cart:", error);	
+		}
 	},
 	updateQuantity: async (productId, quantity) => {
 		if (quantity === 0) {
