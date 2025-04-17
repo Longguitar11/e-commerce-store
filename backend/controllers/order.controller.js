@@ -46,10 +46,10 @@ export const createCheckoutSession = async (req, res) => {
 			cancel_url: `${CLIENT_URL}/purchase-cancel`,
 			discounts: coupon
 				? [
-						{
-							coupon: await createStripeCoupon(coupon.discountPercentage),
-						},
-				  ]
+					{
+						coupon: await createStripeCoupon(coupon.discountPercentage),
+					},
+				]
 				: [],
 			metadata: {
 				userId: req.user._id.toString(),
@@ -64,9 +64,7 @@ export const createCheckoutSession = async (req, res) => {
 			},
 		});
 
-		if (totalAmount >= 20000) {
-			await createNewCoupon(req.user._id);
-		}
+
 
 		res.status(200).json({ id: session.id, totalAmount: totalAmount / 100 });
 	} catch (error) {
@@ -91,6 +89,11 @@ export const checkoutSuccess = async (req, res) => {
 						isActive: false,
 					}
 				);
+			}
+
+			// give a discount 10% off when total amount is more than 200$
+			if (session.amount_total / 100 >= 200) {
+				await createNewCoupon(session.metadata.userId);
 			}
 
 			// create a new Order
@@ -136,7 +139,7 @@ async function createNewCoupon(userId) {
 		code: "GIFT" + Math.random().toString(36).substring(2, 8).toUpperCase(),
 		discountPercentage: 10,
 		expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-		userId: userId,
+		userId,
 	});
 
 	await newCoupon.save();

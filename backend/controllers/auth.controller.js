@@ -63,7 +63,7 @@ export const logout = async (req, res) => {
 export const refreshAccessToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
     
-    if (!refreshToken) return res.status(401).json({ error: "No refresh token provided" });
+    if (!refreshToken) return res.status(400).json({ error: "No refresh token provided" });
 
     try {
         const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);

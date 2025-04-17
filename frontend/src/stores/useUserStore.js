@@ -47,7 +47,7 @@ const useUserStore = create((set, get) => ({
 
         try {
             await axios.post('/auth/logout');
-            set({ user: null, loading: false });
+            set({ user: null, loading: false});
         } catch (error) {
             set({ loading: false });
             toast.error(error.response.data.error || "An error occurred");
@@ -84,6 +84,7 @@ axios.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
@@ -106,6 +107,7 @@ axios.interceptors.response.use(
                 return Promise.reject(refreshError);
             }
         }
+
         return Promise.reject(error);
     }
 );
