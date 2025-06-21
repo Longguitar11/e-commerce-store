@@ -77,12 +77,9 @@ const ProductForm = ({ product, type, setIsProductModal }) => {
 
 			reader.onloadend = () => {
 				if (type === "category") {
-					console.log("set new category image");
 					setNewCategory({ ...newCategory, image: reader.result });
 				}
 				else {
-					console.log("set new product image");
-
 					setNewProduct({ ...newProduct, image: reader.result });
 				}
 			};
