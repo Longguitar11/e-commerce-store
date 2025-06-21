@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
 
@@ -7,6 +7,8 @@ const FeaturedProducts = ({ featuredProducts }) => {
 	const [itemsPerPage, setItemsPerPage] = useState(4);
 
 	const { addToCart } = useCartStore();
+
+	console.log('featured products render')
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -29,8 +31,8 @@ const FeaturedProducts = ({ featuredProducts }) => {
 		setCurrentIndex((prevIndex) => prevIndex - itemsPerPage);
 	};
 
-	const isStartDisabled = currentIndex === 0;
-	const isEndDisabled = currentIndex >= featuredProducts.length - itemsPerPage;
+	const isStartDisabled = useMemo(() => currentIndex === 0, [currentIndex]);
+	const isEndDisabled = useMemo(() => currentIndex >= featuredProducts.length - itemsPerPage, [currentIndex, featuredProducts, itemsPerPage]);
 
 	return (
 		<div className='py-12'>
@@ -40,10 +42,13 @@ const FeaturedProducts = ({ featuredProducts }) => {
 					<div className='overflow-hidden'>
 						<div
 							className='flex transition-transform duration-300 ease-in-out'
-							style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
+							style={{ 
+								transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`,
+								willChange: 'transform' 
+							}}
 						>
 							{featuredProducts?.map((product) => (
-								<div key={product._id} className='w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex-shrink-0 px-2'>
+								<div key={product._id} className='flex-shrink-0 px-2' style={{ width: `${100 / itemsPerPage}%` }}>
 									<div className='bg-gray-800 bg-opacity-10 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden h-full transition-all duration-300 hover:shadow-xl border border-emerald-500/30'>
 										<div className='overflow-hidden'>
 											<img

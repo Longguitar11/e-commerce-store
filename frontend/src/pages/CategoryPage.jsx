@@ -20,7 +20,7 @@ const CategoryPage = () => {
 	return (
 		<div className='min-h-screen'>
 			<div className='relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
-				<ArrowLeftCircleIcon size={50} className="hover:text-emerald-500 transition-colors ease-in-out duration-200 cursor-pointer" onClick={() => window.history.back()} />
+				<ArrowLeftCircleIcon size={50} className="text-gray-100 hover:text-emerald-500 transition-colors ease-in-out duration-200 cursor-pointer" onClick={() => window.history.back()} />
 
 				<motion.h1
 					className='capitalize text-center text-4xl sm:text-5xl font-bold text-emerald-400 mb-8'
