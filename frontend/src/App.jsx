@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import { AdminPage } from './pages/admin'
 import { LoginPage, SignupPage } from './pages/auth'
@@ -15,6 +15,8 @@ import PurchaseCancelPage from './pages/PurchaseCancelPage'
 
 function App() {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+
   const { user, checkingAuth, checkAuth } = useUserStore();
   const { getCartItems } = useCartStore();
 
@@ -22,9 +24,8 @@ function App() {
     checkAuth();
   }, []);
 
-
   useEffect(() => {
-    if (!checkingAuth && !user) navigate("/login")
+    if (!checkingAuth && !user && pathname !== "/login") navigate("/login")
   }, [user, checkingAuth]);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ function App() {
           <Route path="/signup" element={user ? <Navigate to="/" /> : <SignupPage />} />
           <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
           <Route path="/secret-dashboard" element={user?.role === "admin" ? <AdminPage /> : <Navigate to="/login" />} />
-          <Route path='/category/:category' element={<CategoryPage />} />
+          <Route path='/category/:categoryId' element={<CategoryPage />} />
           <Route path='/cart' element={<CartPage />} />
           <Route path='/purchase-success' element={<PurchaseSuccessPage />} />
           <Route path='/purchase-cancel' element={< PurchaseCancelPage />} />

@@ -49,7 +49,7 @@ const useUserStore = create((set, get) => ({
             set({ user: null, loading: false});
         } catch (error) {
             set({ loading: false });
-            toast.error(error.response.data.error || "An error occurred");
+            toast.error(error.response.data.error || "An error occurred", { id: "logout" });
         }
     },
     checkAuth: async () => {

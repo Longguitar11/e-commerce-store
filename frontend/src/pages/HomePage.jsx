@@ -2,23 +2,19 @@ import { useEffect } from "react";
 import CategoryItem from "../components/CategoryItem";
 import FeaturedProducts from "../components/FeaturedProducts";
 import { useProductStore } from "../stores/useProductStore";
-
-const categories = [
-	{ href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
-	{ href: "/t-shirts", name: "T-shirts", imageUrl: "/tshirts.jpg" },
-	{ href: "/shoes", name: "Shoes", imageUrl: "/shoes.jpg" },
-	{ href: "/glasses", name: "Glasses", imageUrl: "/glasses.png" },
-	{ href: "/jackets", name: "Jackets", imageUrl: "/jackets.jpg" },
-	{ href: "/suits", name: "Suits", imageUrl: "/suits.jpg" },
-	{ href: "/bags", name: "Bags", imageUrl: "/bags.jpg" },
-];
+import { useCategoryStore } from "../stores/useCategoryStore";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const HomePage = () => {
-	const { fetchFeaturedProducts, products, isLoading } = useProductStore();
+	const { fetchFeaturedProducts, products, loading } = useProductStore();
+	const { categories, fetchCategories, loading: isLoadingCategories } = useCategoryStore();
 
 	useEffect(() => {
 		fetchFeaturedProducts();
-	}, [fetchFeaturedProducts]);
+		fetchCategories();
+	}, [fetchFeaturedProducts, fetchCategories]);
+
+	if (isLoadingCategories) return <LoadingSpinner />
 
 	return (
 		<div className='relative min-h-screen text-white overflow-hidden'>
@@ -31,12 +27,16 @@ const HomePage = () => {
 				</p>
 
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
-					{categories.map((category) => (
+					{!isLoadingCategories && categories.length > 0 ? categories.map((category) => (
 						<CategoryItem category={category} key={category.name} />
-					))}
+					)) :
+						!isLoadingCategories && categories.length === 0
+							? <p className="text-center text-2xl text-red-500">Empty categories</p>
+							: null
+					}
 				</div>
 
-				{!isLoading && products.length > 0 && <FeaturedProducts featuredProducts={products} />}
+				{!loading && products.length > 0 && <FeaturedProducts featuredProducts={products} />}
 			</div>
 		</div>
 	);

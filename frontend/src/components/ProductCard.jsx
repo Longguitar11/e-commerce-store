@@ -32,7 +32,7 @@ const ProductCard = ({ product }) => {
 				</div>
 				<button
 					className='flex items-center justify-center rounded-lg bg-emerald-600 px-5 py-2.5 text-center text-sm font-medium
-					 text-white hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
+					text-white cursor-pointer hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-300'
 					onClick={handleAddToCart}
 				>
 					<ShoppingCart size={22} className='mr-2' />

@@ -4,8 +4,9 @@ import Product from "../models/product.model.js";
 
 export const getAllProducts = async (req, res) => {
 	try {
-		const products = await Product.find({}); // find all products
-		res.json({ products });
+		const products = await Product.find().populate({ path: "category", select: "name" }); // find all products
+
+		res.json(products);
 	} catch (error) {
 		console.log("Error in getAllProducts controller", error.message);
 		res.status(500).json({ message: "Server error", error: error.message });
@@ -64,6 +65,47 @@ export const createProduct = async (req, res) => {
 	}
 };
 
+export const updateProductById = async (req, res) => {
+	const { id } = req.params;
+	const { name, description, price, image, category } = req.body;
+	try {
+		const product = await Product.findById(id);
+
+		if (!product) {
+			return res.status(404).json({ message: "Product not found" });
+		}
+
+		let cloudinaryResponse = null;
+
+		if (image) {
+			cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
+			if (product.image) {
+				const publicId = product.image.split("/").pop().split(".")[0];
+				try {
+					await cloudinary.uploader.destroy(`products/${publicId}`);
+				} catch (error) {
+					console.log("error deleting image from cloduinary", error);
+				}
+			}
+		}
+
+		const updatedProduct = await Product.findByIdAndUpdate(id, {
+			name,
+			description,
+			price,
+			image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
+			category,
+		},
+			{ new: true } // this will return the updated product
+		).populate({ path: "category", select: "name" });
+
+		res.json({ message: "Update product successfully", product: updatedProduct });
+	} catch (error) {
+		console.log("Error in updateProductById controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
+};
+
 export const deleteProduct = async (req, res) => {
 	try {
 		const product = await Product.findById(req.params.id);
@@ -76,7 +118,7 @@ export const deleteProduct = async (req, res) => {
 			const publicId = product.image.split("/").pop().split(".")[0];
 			try {
 				await cloudinary.uploader.destroy(`products/${publicId}`);
-				console.log("deleted image from cloduinary");
+				console.log("deleted image from cloudinary");
 			} catch (error) {
 				console.log("error deleting image from cloduinary", error);
 			}
@@ -118,8 +160,8 @@ export const getRecommendedProducts = async (req, res) => {
 export const getProductsByCategory = async (req, res) => {
 	const { category } = req.params;
 	try {
-		const products = await Product.find({ category });
-		res.json({ products });
+		const products = await Product.find({ category }).populate({ path: "category", select: "name" });
+		res.json(products);
 	} catch (error) {
 		console.log("Error in getProductsByCategory controller", error.message);
 		res.status(500).json({ message: "Server error", error: error.message });

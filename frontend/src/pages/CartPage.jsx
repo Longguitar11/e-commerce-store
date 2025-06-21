@@ -6,9 +6,12 @@ import CartItem from "../components/CartItem";
 import PeopleAlsoBought from "../components/PeopleAlsoBought";
 import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const CartPage = () => {
-	const { cart, isCouponApplied } = useCartStore();
+	const { cart, cartLoading } = useCartStore();
+
+	if (cartLoading) return <LoadingSpinner />
 
 	return (
 		<div className='py-8 md:py-16'>
@@ -20,15 +23,16 @@ const CartPage = () => {
 						animate={{ opacity: 1, x: 0 }}
 						transition={{ duration: 0.5, delay: 0.2 }}
 					>
-						{cart.length === 0 ? (
+						{!cartLoading && cart.length === 0 ? (
 							<EmptyCartUI />
-						) : (
-							<div className='space-y-6'>
-								{cart.map((item) => (
-									<CartItem key={item._id} item={item} />
-								))}
-							</div>
-						)}
+						) :
+							(
+								<div className='space-y-6'>
+									{cart.map((item) => (
+										<CartItem key={item._id} item={item} />
+									))}
+								</div>
+							)}
 						{cart.length > 0 && <PeopleAlsoBought />}
 					</motion.div>
 

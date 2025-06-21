@@ -60,7 +60,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 											<button
 												onClick={() => addToCart(product)}
 												className='w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2 px-4 rounded transition-colors duration-300 
-												flex items-center justify-center'
+												flex items-center justify-center cursor-pointer'
 											>
 												<ShoppingCart className='w-5 h-5 mr-2' />
 												Add to Cart
@@ -74,7 +74,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 					<button
 						onClick={prevSlide}
 						disabled={isStartDisabled}
-						className={`absolute top-1/2 -left-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${
+						className={`absolute top-1/2 -left-4 transform -translate-y-1/2 p-2 rounded-full cursor-pointer transition-colors duration-300 ${
 							isStartDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"
 						}`}
 					>
@@ -84,7 +84,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
 					<button
 						onClick={nextSlide}
 						disabled={isEndDisabled}
-						className={`absolute top-1/2 -right-4 transform -translate-y-1/2 p-2 rounded-full transition-colors duration-300 ${
+						className={`absolute top-1/2 -right-4 transform -translate-y-1/2 p-2 rounded-full cursor-pointer transition-colors duration-300 ${
 							isEndDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-500"
 						}`}
 					>
